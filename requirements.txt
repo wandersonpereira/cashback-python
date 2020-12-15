@@ -1,0 +1,9 @@
+falcon
+waitress
+passlib
+bcrypt
+requests
+pymongo
+marshmallow-dataclass
+dataclasses-json
+pyjwt

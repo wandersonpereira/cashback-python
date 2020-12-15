@@ -1,0 +1,46 @@
+ version: '3.7'
+ services:
+
+  mongo:
+    build:
+      context: ./
+      dockerfile: ./docker/mongo/Dockerfile
+    container_name: cashback-mongo
+    restart: unless-stopped
+    networks:
+        rchlonet:
+          ipv4_address: 172.168.0.11
+    environment:
+      MONGO_INITDB_DATABASE: database_dev
+      MONGO_INITDB_ROOT_USERNAME: mongoadmin
+      MONGO_INITDB_ROOT_PASSWORD: secret
+    ports:
+      - 27017:27017
+    volumes:
+      - $HOME/mongo/data:/data
+
+  microservice:
+    build:
+      context: ./
+      dockerfile: ./docker/application/Dockerfile
+    container_name: cashback-microservice
+    restart: unless-stopped
+    networks:
+      rchlonet:
+        ipv4_address: 172.168.0.12
+    ports:
+      - 8082:8082
+      - 3000:3000
+      - 8000:8000
+    volumes:
+     - ./:/app
+  
+ ## -- REDE-LOCAL -- ## 
+ networks:
+   rchlonet:
+       driver: bridge
+       ipam:
+         driver: default
+         config:
+         - subnet: 172.168.0.0/24 
+
